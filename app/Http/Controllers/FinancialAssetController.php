@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFinancialAssetRequest;
 use App\Http\Requests\UpdateFinancialAssetRequest;
+use App\Http\Resources\FinancialAssetResource;
 use App\Models\FinancialAsset;
 
 class FinancialAssetController extends Controller
@@ -13,7 +14,8 @@ class FinancialAssetController extends Controller
      */
     public function index()
     {
-        //
+        $assets = FinancialAsset::all();
+        return FinancialAssetResource::collection($assets);
     }
 
     /**
@@ -29,15 +31,29 @@ class FinancialAssetController extends Controller
      */
     public function store(StoreFinancialAssetRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $financialAsset = new FinancialAsset();
+        $financialAsset->name = $validatedData['name'];
+        $financialAsset->code = $validatedData['code'];
+        $financialAsset->is_foreigner = $validatedData['is_foreigner'];
+        $financialAsset->asset_type = $validatedData['asset_type'];
+        $financialAsset->stock_type = $validatedData['stock_type'];
+        $financialAsset->cnpj = $validatedData['cnpj'];
+        $financialAsset->fii_admin_name = $validatedData['fii_admin_name'];
+        $financialAsset->fii_admin_cnpj = $validatedData['fii_admin_cnpj'];
+        $financialAsset->save();
+
+        return response()->json(['message' => 'Financial asset created successfully!', 'data' => $financialAsset], 201);
+        //dd($financialAsset);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(FinancialAsset $financialAsset)
+    public function show(FinancialAsset $financialAsset): FinancialAssetResource
     {
-        //
+        return new FinancialAssetResource($financialAsset);
     }
 
     /**

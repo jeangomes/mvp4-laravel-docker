@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('code', 20);
             $table->boolean('is_foreigner')->default(false);
             $table->enum('asset_type', ['ETF', 'Stock', 'FII', 'Crypto', 'RF']);
-            $table->enum('stock_type', ['ON', 'PN', 'UNIT']);
+            $table->enum('stock_type', ['ON', 'PN', 'UNIT'])->nullable();
             $table->string('cnpj', 20)->nullable();
-            $table->string('fii_admin_name', 20)->nullable();
+            $table->string('fii_admin_name')->nullable();
             $table->string('fii_admin_cnpj', 20)->nullable();
             $table->timestamps();
         });

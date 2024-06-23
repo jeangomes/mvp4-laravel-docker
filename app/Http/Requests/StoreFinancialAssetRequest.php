@@ -11,7 +11,7 @@ class StoreFinancialAssetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StoreFinancialAssetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:20|unique:financial_assets,code',
+            'is_foreigner' => 'boolean',
+            'asset_type' => 'required|in:ETF,Stock,FII,Crypto,RF',
+            'stock_type' => 'nullable|in:ON,PN,UNIT',
+            'cnpj' => 'nullable|string|max:20',
+            'fii_admin_name' => 'nullable|string|max:20',
+            'fii_admin_cnpj' => 'nullable|string|max:20',
         ];
     }
 }
