@@ -3,27 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFinancialAssetRequest;
-use App\Http\Requests\UpdateFinancialAssetRequest;
 use App\Http\Resources\FinancialAssetResource;
 use App\Models\FinancialAsset;
+use Illuminate\Support\Facades\Request;
 
 class FinancialAssetController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $assets = FinancialAsset::all();
-        return FinancialAssetResource::collection($assets);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $assets = FinancialAsset::query()->orderBy('asset_type')->orderBy('code')->get();
+        return response()->json($assets->groupBy('asset_type'));
+        //return FinancialAssetResource::collection($assets->groupBy('asset_type'));
     }
 
     /**
@@ -67,7 +60,7 @@ class FinancialAssetController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFinancialAssetRequest $request, FinancialAsset $financialAsset)
+    public function update(StoreFinancialAssetRequest $request, FinancialAsset $financialAsset)
     {
         //
     }
