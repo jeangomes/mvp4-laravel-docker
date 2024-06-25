@@ -18,7 +18,7 @@ class FinancialAssetFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->company,
             'code' => strtoupper(Str::random(6)),
             'is_foreigner' => $this->faker->boolean,
             'asset_type' => $this->faker->randomElement(['ETF', 'Stock', 'FII', 'Crypto', 'RF']),
