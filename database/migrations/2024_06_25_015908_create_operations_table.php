@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('operations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('note_id');
+            $table->unsignedBigInteger('negotiation_note_id');
             $table->string('operation_type', 50);
             $table->string('code', 20);
             $table->integer('quantity');
             $table->decimal('price');
-            $table->date('operation_date');
             $table->decimal('operation_amount'); // Valor Negociado
 
             $table->decimal('taxas');
@@ -29,7 +28,7 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::table('operations', function (Blueprint $table) {
-            $table->foreign('note_id')->references('id')->on('negotiation_notes');
+            $table->foreign('negotiation_note_id')->references('id')->on('negotiation_notes');
         });
     }
 
