@@ -20,11 +20,12 @@ class Operation extends Model
         return [
             'price' => 'float',
             'operation_amount' => 'float',
+            'total_negociado' => 'float',
             'taxas' => 'float',
         ];
     }
 
-    public function note(): BelongsTo
+    public function negotiationNote(): BelongsTo
     {
         return $this->belongsTo(NegotiationNote::class);
     }
