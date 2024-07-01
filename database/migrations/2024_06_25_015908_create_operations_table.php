@@ -22,9 +22,6 @@ return new class extends Migration
 
             $table->decimal('taxas');
             $table->decimal('total_negociado');
-            $table->integer('quantidade_total');
-            $table->decimal('preco_medio');
-            $table->decimal('custo_medio');
             $table->timestamps();
         });
         Schema::table('operations', function (Blueprint $table) {
