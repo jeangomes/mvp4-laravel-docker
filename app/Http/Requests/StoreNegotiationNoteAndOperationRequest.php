@@ -35,6 +35,7 @@ class StoreNegotiationNoteAndOperationRequest extends FormRequest
 
             'operations' => ['required', 'array', 'min:1'],
             'operations.*.operation_type' => ['required', 'string'],
+            'operations.*.asset_type' => ['required', 'string'],
             'operations.*.code' => ['required', 'string'],
             'operations.*.quantity' => ['required', 'integer', 'min:1'],
             'operations.*.price' => ['required', 'numeric'],

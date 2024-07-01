@@ -8,6 +8,7 @@ use App\Models\FinancialAsset;
 use App\Models\NegotiationNote;
 use App\Models\Operation;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -47,7 +48,11 @@ class NegotiationNoteController extends Controller
 
             $negotiationNote->save();
 
+            $operations = collect($validatedData['operations']);
+            $amountStock = $this->getSum($operations, 'Stock');
+            //$amountFiis = $this->getSum($operations, 'FII');
             foreach ($validatedData['operations'] as $operation) {
+                $totalTaxaWithoutCorretagem = $negotiationNote->total_taxa - $negotiationNote->corretagem;
                 $newOperation = new Operation();
                 $newOperation->negotiation_note_id = $negotiationNote->id;
                 $newOperation->operation_type = $operation['operation_type'];
@@ -55,7 +60,13 @@ class NegotiationNoteController extends Controller
                 $newOperation->quantity = $operation['quantity'];
                 $newOperation->price = $operation['price'];
                 $newOperation->operation_amount = $operation['quantity'] * $operation['price'];
-                $newOperation->taxas = ($newOperation->operation_amount * $negotiationNote->total_taxa) / $negotiationNote->valor_liquido;
+                $taxaGeral = ($newOperation->operation_amount * $totalTaxaWithoutCorretagem) / $negotiationNote->valor_liquido;
+                if ($operation['asset_type'] === 'Stock') {
+                    $taxaCorretagem = ($newOperation->operation_amount * $negotiationNote->corretagem) / $amountStock;
+                    $newOperation->taxas = $taxaGeral + $taxaCorretagem;
+                } else {
+                    $newOperation->taxas = $taxaGeral;
+                }
                 $newOperation->total_negociado = $newOperation->operation_amount + $newOperation->taxas;
                 $newOperation->save();
             }
@@ -88,5 +99,39 @@ class NegotiationNoteController extends Controller
     public function destroy(FinancialAsset $financialAsset)
     {
         //
+    }
+
+    /**
+     * @param Collection $operations
+     * @param $type
+     * @return Collection
+     */
+    function getFilterOperation(Collection $operations, $type): Collection
+    {
+        return $operations->filter(fn($step) => $step['asset_type'] === $type);
+    }
+
+    /**
+     * @param Collection $assets
+     * @return void
+     */
+    function transformCollection(Collection $assets): void
+    {
+        $assets->transform(function ($asset) {
+            $asset['operation_amount'] = $asset['quantity'] * $asset['price'];
+            return $asset;
+        });
+    }
+
+    /**
+     * @param Collection $assets
+     * @param $type
+     * @return mixed
+     */
+    function getSum(Collection $assets, $type): mixed
+    {
+        $assets = $this->getFilterOperation($assets, $type);
+        $this->transformCollection($assets);
+        return $assets->sum('operation_amount');
     }
 }
