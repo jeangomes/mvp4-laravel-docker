@@ -16,7 +16,7 @@ class AssetsListForComboController extends Controller
         $assets = FinancialAsset::query()
             ->orderBy('asset_type')
             ->orderBy('code')
-            ->pluck('code');
+            ->get(['code', 'asset_type']);
 
         return response()->json($assets);
     }
