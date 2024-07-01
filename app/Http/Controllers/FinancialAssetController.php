@@ -15,6 +15,7 @@ class FinancialAssetController extends Controller
     public function index(Request $request)
     {
         $assets = FinancialAsset::query()->orderBy('asset_type')->orderBy('code')->get();
+
         return response()->json($assets->groupBy('asset_type'));
         //return FinancialAssetResource::collection($assets->groupBy('asset_type'));
     }
