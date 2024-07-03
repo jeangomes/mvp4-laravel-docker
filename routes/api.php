@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssetsListForComboController;
+use App\Http\Controllers\CurrentPositionController;
 use App\Http\Controllers\FinancialAssetController;
 use App\Http\Controllers\NegotiationNoteController;
 use App\Http\Controllers\OperationListController;
@@ -15,3 +16,4 @@ Route::apiResource('/financial-assets', FinancialAssetController::class);
 Route::apiResource('/negotiation-notes', NegotiationNoteController::class);
 Route::get('operations', OperationListController::class);
 Route::get('assets-list', AssetsListForComboController::class);
+Route::get('current-position', CurrentPositionController::class);
