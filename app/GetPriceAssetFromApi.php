@@ -16,6 +16,6 @@ class GetPriceAssetFromApi
         $token = config('app.brapi_api_token');
         $response = Http::get('https://brapi.dev/api/quote/'.$code.'?token='.$token);
         $result = json_decode($response->body(), true);
-        $this->price = $result['results'][0]['regularMarketPrice'];
+        $this->price = $result['results'][0]['regularMarketPrice'] ?? 0;
     }
 }

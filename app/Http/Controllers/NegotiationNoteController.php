@@ -101,37 +101,25 @@ class NegotiationNoteController extends Controller
         //
     }
 
-    /**
-     * @param Collection $operations
-     * @param $type
-     * @return Collection
-     */
-    function getFilterOperation(Collection $operations, $type): Collection
+    public function getFilterOperation(Collection $operations, $type): Collection
     {
-        return $operations->filter(fn($step) => $step['asset_type'] === $type);
+        return $operations->filter(fn ($step) => $step['asset_type'] === $type);
     }
 
-    /**
-     * @param Collection $assets
-     * @return void
-     */
-    function transformCollection(Collection $assets): void
+    public function transformCollection(Collection $assets): void
     {
         $assets->transform(function ($asset) {
             $asset['operation_amount'] = $asset['quantity'] * $asset['price'];
+
             return $asset;
         });
     }
 
-    /**
-     * @param Collection $assets
-     * @param $type
-     * @return mixed
-     */
-    function getSum(Collection $assets, $type): mixed
+    public function getSum(Collection $assets, $type): mixed
     {
         $assets = $this->getFilterOperation($assets, $type);
         $this->transformCollection($assets);
+
         return $assets->sum('operation_amount');
     }
 }
