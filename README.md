@@ -38,7 +38,7 @@ adicionado das variáveis de ambiente.
 ## Instruções de Instalação
 
 1. Rode o comando **docker-compose up -d** para criar a imagem e levantar os containers necessários.
-2. Rode o composer install
-3. Verifique se o BD foi criado e execute as migrations para criar as tabelas necessárias.
+2. Rode o **composer install** para instalar as dependências do projeto, acesse o container o rode **docker-compose exec app composer install**
+3. Verifique as variáveis de ambiente e se o BD foi criado e execute as migrations para criar as tabelas necessárias.
 
 
