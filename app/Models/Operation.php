@@ -29,4 +29,9 @@ class Operation extends Model
     {
         return $this->belongsTo(NegotiationNote::class);
     }
+
+    public function financialAsset(): BelongsTo
+    {
+        return $this->belongsTo(FinancialAsset::class, 'code', 'code');
+    }
 }
