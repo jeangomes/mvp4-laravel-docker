@@ -35,7 +35,7 @@ class CurrentPositionController extends Controller
 
             return $result;
         });
-
-        return response()->json($results);
+        $results2 = $results->filter(fn ($result) => $result['price'] > 0);
+        return response()->json($results2->values()->all());
     }
 }
